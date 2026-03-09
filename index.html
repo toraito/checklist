@@ -365,7 +365,7 @@ function render(){
 // ─── SWIPE ───────────────────────────────────────────────────
 function swS(e,id){if(!S.sw[id])S.sw[id]={offset:0,show:false};S.sw[id].startX=e.touches[0].clientX;S.sw[id].swiping=true}
 function swM(e,id){const sw=S.sw[id];if(!sw?.swiping)return;const dx=e.touches[0].clientX-sw.startX;if(dx<0){sw.offset=Math.max(dx,-80);const el=document.querySelector(`#sw-${CSS.escape(id)} .todo-item`);if(el){el.style.transform=`translateX(${sw.offset}px)`;el.classList.add("swiping")}}}
-function swE(id){const sw=S.sw[id];if(!sw)return;sw.swiping=false;if(sw.offset<-40){sw.offset=-72;sw.show=true}else{sw.offset=0;sw.show=false}render()}
+function swE(id){const sw=S.sw[id];if(!sw)return;sw.swiping=false;if(sw.offset<-40){sw.offset=-72;sw.show=true;render()}else if(sw.offset!==0){sw.offset=0;sw.show=false;render()}}
 
 // ─── SERVICE WORKER ──────────────────────────────────────────
 if("serviceWorker"in navigator){navigator.serviceWorker.register("./sw.js").catch(()=>{})}

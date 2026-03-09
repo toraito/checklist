@@ -17,8 +17,8 @@
     --mono:'JetBrains Mono',monospace;--serif:'Newsreader','Georgia',serif;
     --bg:#faf7f2;--text:#3a3028;--text-dim:#8a7e70;--text-muted:#b0a898;
     --border:#ebe5db;--card:#fff;--hover:#faf7f2;
-    --a-daily:#a0785a;--a-weekly:#5a7a5a;--a-monthly:#5a6a7a;--a-todo:#7a6a5a;--a-progress:#7a5a7a;
-    --bg-daily:#f5ebe0;--bg-weekly:#e8ede4;--bg-monthly:#e4e8ed;--bg-todo:#f2ede8;--bg-progress:#f0e8f0;
+    --a-daily:#a0785a;--a-weekly:#5a7a5a;--a-monthly:#5a6a7a;--a-progress:#7a5a7a;
+    --bg-daily:#f5ebe0;--bg-weekly:#e8ede4;--bg-monthly:#e4e8ed;--bg-progress:#f0e8f0;
   }
   body{background:var(--bg);font-family:var(--serif);color:var(--text);-webkit-tap-highlight-color:transparent;
     padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
@@ -30,7 +30,7 @@
   .header .date{font-size:14px;color:var(--text-dim);font-family:var(--mono);font-weight:400;margin-top:4px}
 
   .tabs{display:flex;gap:3px;margin-bottom:20px;background:#f0ebe3;border-radius:12px;padding:4px}
-  .tab-btn{flex:1;padding:9px 0;border:none;border-radius:9px;cursor:pointer;font-family:var(--mono);font-size:11px;font-weight:400;background:transparent;color:#9a8e80;transition:all 0.2s;white-space:nowrap}
+  .tab-btn{flex:1;padding:9px 0;border:none;border-radius:9px;cursor:pointer;font-family:var(--mono);font-size:12px;font-weight:400;background:transparent;color:#9a8e80;transition:all 0.2s;white-space:nowrap}
   .tab-btn.active{background:var(--card);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
 
   .progress-box{border-radius:14px;padding:16px 18px;margin-bottom:20px}
@@ -81,24 +81,13 @@
   .reset-btn{background:transparent;border:1px solid #ddd5c9;border-radius:8px;padding:8px 20px;font-family:var(--mono);font-size:12px;color:#9a8e80;cursor:pointer;transition:all 0.2s}
   .reset-btn:hover{background:#f0ebe3;color:#6a5e50}
 
-  .todo-input-wrap{display:flex;gap:8px;margin-bottom:20px;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:8px;align-items:center}
-  .todo-input{flex:1;border:none;outline:none;background:transparent;font-size:15px;font-family:var(--serif);color:var(--text);padding:8px 4px}
-  .todo-add-btn{width:36px;height:36px;border-radius:8px;border:none;background:#e0d8cc;color:#fff;cursor:default;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:300;transition:all 0.2s}
-  .todo-add-btn.ready{background:var(--a-daily);cursor:pointer}
-
-  .todo-item-wrap{position:relative;overflow:hidden;border-radius:8px;margin-bottom:4px}
-  .todo-delete-bg{position:absolute;right:0;top:0;bottom:0;width:72px;background:#d45;display:flex;align-items:center;justify-content:center;border-radius:0 8px 8px 0;cursor:pointer;transition:opacity 0.2s}
-  .todo-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:8px;cursor:pointer;background:var(--card);border:1px solid var(--border);position:relative;z-index:1;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1)}
-  .todo-item.swiping{transition:none}
-  .swipe-hint{font-size:10px;color:#d0c8bc;font-family:var(--mono)}
-
   .streak-card{background:var(--card);border-radius:14px;border:1px solid var(--border);padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:16px}
   .streak-num{font-size:32px;font-weight:600;font-family:var(--mono)}
   .streak-reset{background:transparent;border:1px solid #d4ccc0;border-radius:8px;padding:6px 12px;font-family:var(--mono);font-size:11px;color:#9a8e80;cursor:pointer}
 
   .stats-card{background:var(--card);border-radius:14px;border:1px solid var(--border);padding:20px;margin-bottom:16px}
   .stats-title{font-size:13px;font-family:var(--mono);color:var(--text-dim);font-weight:500;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px}
-  .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
   .stat-box{background:var(--bg);border-radius:10px;padding:14px 16px;text-align:center}
   .stat-val{font-size:26px;font-weight:600;font-family:var(--mono)}
   .stat-label{font-size:12px;color:var(--text-dim);font-family:var(--mono);font-weight:500;margin-top:2px}
@@ -126,7 +115,6 @@
   .backup-msg{font-size:12px;font-family:var(--mono);margin-top:10px;padding:8px 12px;border-radius:8px;text-align:center}
 
   .empty-msg{text-align:center;color:var(--text-muted);padding:40px 0;font-size:15px}
-
   #backup-file{display:none}
 </style>
 </head>
@@ -164,19 +152,21 @@ const DT={
   bedroom:{label:"Bedroom",icon:"◎",
     daily:[{id:"br-floor",label:"Free up floor"},{id:"br-clothes",label:"Clothes in basket"},{id:"br-nightstand",label:"Tidy nightstand"}],
     weekly:[{id:"br-vacuum",label:"Vacuum"}],monthly:[]},
+  hannah:{label:"Hannah's Room",icon:"♡",
+    daily:[{id:"h-tidy",label:"Tidy up"}],
+    weekly:[],monthly:[]},
   patio:{label:"Patio",icon:"✧",daily:[{id:"pa-table",label:"Clear table"}],weekly:[],monthly:[]},
 };
 const RK=Object.keys(DT);
-const XPV={todo:1,todos:1,daily:1,weekly:5,monthly:10};
+const XPV={daily:1,weekly:5,monthly:10};
 function xpNeed(lv){return 10+lv*10}
 function calcLv(xp){let r=xp,l=1;while(r>=xpNeed(l)){r-=xpNeed(l);l++}return{lv:l,cur:r,need:xpNeed(l)}}
 
 // ─── DATE ────────────────────────────────────────────────────
 function isoW(d){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const n=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-n);const y=new Date(Date.UTC(t.getUTCFullYear(),0,1));return Math.ceil(((t-y)/864e5+1)/7)}
 function isoWY(d){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const n=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-n);return t.getUTCFullYear()}
-function dKey(d){return`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`}
-function today(){return dKey(new Date())}
-function yesterday(){const d=new Date();d.setDate(d.getDate()-1);return dKey(d)}
+function today(){const n=new Date();return`${n.getFullYear()}-${n.getMonth()+1}-${n.getDate()}`}
+function yesterday(){const d=new Date();d.setDate(d.getDate()-1);return`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`}
 function sKey(f){const n=new Date(),y=n.getFullYear(),m=n.getMonth()+1,d=n.getDate();if(f==="daily")return`cl:d:${y}-${m}-${d}`;if(f==="weekly")return`cl:w:${isoWY(n)}-w${isoW(n)}`;if(f==="monthly")return`cl:m:${y}-${m}`;return`cl:${f}`}
 function isDone(t,s){if(t.type==="counter")return(s[t.id]||0)>=t.min;return!!s[t.id]}
 function fmtDate(){return new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
@@ -188,13 +178,13 @@ function sD(k){try{localStorage.removeItem(k)}catch{}}
 
 // ─── STATE ───────────────────────────────────────────────────
 let S={
-  tab:"daily",chk:{},exp:{},todos:sG("cl:todos")||[],newTodo:"",
+  tab:"daily",chk:{},exp:{},
   edit:false,adding:null,newTask:"",
   custom:sG("cl:custom")||{},hidden:sG("cl:hidden")||{},
-  stats:sG("cl:stats")||{todos:0,daily:0,weekly:0,monthly:0,xp:0,streak:0,frozen:false,lastActiveDate:null},
-  sw:{},backupMsg:null,doneExp:false,
+  stats:sG("cl:stats")||{daily:0,weekly:0,monthly:0,xp:0,streak:0,frozen:false,lastActiveDate:null},
+  backupMsg:null,
 };
-function loadChk(){if(!["daily","weekly","monthly"].includes(S.tab))return;S.chk=sG(sKey(S.tab))||{}}
+function loadChk(){S.chk=sG(sKey(S.tab))||{}}
 loadChk();
 (function(){const s=S.stats,t=today(),y=yesterday();if(s.lastActiveDate===t||s.lastActiveDate===y)return;if(s.lastActiveDate&&!s.frozen&&s.streak>0){s.frozen=true;sS("cl:stats",s)}})();
 
@@ -215,9 +205,6 @@ function setCtr(id,v,task){
   const w=isDone(task,S.chk);S.chk[id]=v;const n=isDone(task,S.chk);
   sS(sKey(S.tab),S.chk);if(n!==w)adjStats(S.tab,n?1:-1);if(S.tab==="daily")chkStreak();render()
 }
-function addTodo(){const t=S.newTodo.trim();if(!t)return;S.todos.push({id:`td-${Date.now()}`,label:t,done:false,doneDate:null});S.newTodo="";sS("cl:todos",S.todos);render()}
-function togTodo(id){const i=S.todos.find(t=>t.id===id);if(!i)return;i.done=!i.done;if(i.done){i.doneDate=today();adjStats("todos",1)}else{adjStats("todos",-1);i.doneDate=null}sS("cl:todos",S.todos);render()}
-function delTodo(id){const i=S.todos.find(t=>t.id===id);if(i&&i.done&&i.doneDate===today())adjStats("todos",-1);S.todos=S.todos.filter(t=>t.id!==id);sS("cl:todos",S.todos);render()}
 function togEdit(){S.edit=!S.edit;S.adding=null;render()}
 function hideT(id){S.hidden[id]=true;sS("cl:hidden",S.hidden);render()}
 function unhideT(id){delete S.hidden[id];sS("cl:hidden",S.hidden);render()}
@@ -226,49 +213,31 @@ function startAdd(rk){S.adding=rk;S.newTask="";render();setTimeout(()=>{const e=
 function addCustom(rk){const l=S.newTask.trim();if(!l)return;const c=S.custom;if(!c[S.tab])c[S.tab]={};if(!c[S.tab][rk])c[S.tab][rk]=[];c[S.tab][rk].push({id:`c-${Date.now()}-${Math.random().toString(36).slice(2,6)}`,label:l});sS("cl:custom",c);S.adding=null;S.newTask="";render()}
 function resetFreq(){S.chk={};sD(sKey(S.tab));render()}
 function resetStrk(){S.stats.streak=0;S.stats.frozen=false;S.stats.lastActiveDate=null;sS("cl:stats",S.stats);render()}
-function togDoneExp(){S.doneExp=!S.doneExp;render()}
 
 // ─── BACKUP ──────────────────────────────────────────────────
 function exportData(){
-  const data={};
-  for(let i=0;i<localStorage.length;i++){
-    const k=localStorage.key(i);
-    if(k.startsWith("cl:"))data[k]=sG(k);
-  }
+  const data={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith("cl:"))data[k]=sG(k)}
   const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
+  const url=URL.createObjectURL(blob);const a=document.createElement("a");
   a.href=url;a.download=`checklist-backup-${new Date().toISOString().slice(0,10)}.json`;
   document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
-  S.backupMsg={type:"success",text:"Backup downloaded"};render();
-  setTimeout(()=>{S.backupMsg=null;render()},3000);
+  S.backupMsg={type:"success",text:"Backup downloaded"};render();setTimeout(()=>{S.backupMsg=null;render()},3000);
 }
 function importData(){document.getElementById("backup-file").click()}
 document.getElementById("backup-file").addEventListener("change",function(e){
-  const file=e.target.files[0];if(!file)return;
-  const reader=new FileReader();
+  const file=e.target.files[0];if(!file)return;const reader=new FileReader();
   reader.onload=function(ev){
-    try{
-      const data=JSON.parse(ev.target.result);
-      let count=0;
+    try{const data=JSON.parse(ev.target.result);let count=0;
       Object.entries(data).forEach(([k,v])=>{if(k.startsWith("cl:")){sS(k,v);count++}});
-      // Reload state
-      S.todos=sG("cl:todos")||[];S.custom=sG("cl:custom")||{};S.hidden=sG("cl:hidden")||{};
-      S.stats=sG("cl:stats")||S.stats;loadChk();
+      S.custom=sG("cl:custom")||{};S.hidden=sG("cl:hidden")||{};S.stats=sG("cl:stats")||S.stats;loadChk();
       S.backupMsg={type:"success",text:`Restored ${count} entries`};render();
-      setTimeout(()=>{S.backupMsg=null;render()},3000);
-    }catch{
-      S.backupMsg={type:"error",text:"Invalid backup file"};render();
-      setTimeout(()=>{S.backupMsg=null;render()},3000);
-    }
-  };
-  reader.readAsText(file);
-  e.target.value="";
+    }catch{S.backupMsg={type:"error",text:"Invalid backup file"};render()}
+    setTimeout(()=>{S.backupMsg=null;render()},3000);
+  };reader.readAsText(file);e.target.value="";
 });
 
 // ─── SVG ─────────────────────────────────────────────────────
 const chkSvg=`<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2.5 6.5L5.5 9.5L10.5 3.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-const trashSvg=`<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7h10l-1 10H6L5 7zM8 4h4M3 7h14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const xSvg=`<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="#c4722a" stroke-width="1.5" stroke-linecap="round"/></svg>`;
 const editSvg=c=>`<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 1.5l2.5 2.5L4.5 12H2v-2.5L10 1.5z" stroke="${c}" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const dlSvg=`<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v7M4 7l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
@@ -277,14 +246,13 @@ function flameSvg(f){
   if(f)return`<svg width="40" height="40" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 7 4 10 4 14a8 8 0 0016 0c0-4-4-7-8-12z" fill="#a8d4e6" stroke="#6ba8c4" stroke-width="1.5"/><path d="M9 13l6-4M9 17l6-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/><path d="M12 22a6 6 0 006-6c0-3-3-5.5-6-9.5" fill="#c4e4f0" opacity="0.5"/></svg>`;
   return`<svg width="40" height="40" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 7 4 10 4 14a8 8 0 0016 0c0-4-4-7-8-12z" fill="#e8943a" stroke="#c4722a" stroke-width="1.5"/><path d="M12 22a4 4 0 004-4c0-2-2-4-4-6-2 2-4 4-4 6a4 4 0 004 4z" fill="#f0c060"/></svg>`;
 }
-
 function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
 
 // ─── RENDER ──────────────────────────────────────────────────
 function render(){
   const t=S.tab,isF=["daily","weekly","monthly"].includes(t);
-  const ac=t==="daily"?"var(--a-daily)":t==="weekly"?"var(--a-weekly)":t==="monthly"?"var(--a-monthly)":t==="todo"?"var(--a-todo)":"var(--a-progress)";
-  const bg=t==="daily"?"var(--bg-daily)":t==="weekly"?"var(--bg-weekly)":t==="monthly"?"var(--bg-monthly)":t==="todo"?"var(--bg-todo)":"var(--bg-progress)";
+  const ac=t==="daily"?"var(--a-daily)":t==="weekly"?"var(--a-weekly)":t==="monthly"?"var(--a-monthly)":"var(--a-progress)";
+  const bg=t==="daily"?"var(--bg-daily)":t==="weekly"?"var(--bg-weekly)":t==="monthly"?"var(--bg-monthly)":"var(--bg-progress)";
 
   let rd=[],tt=0,td=0;
   if(isF){rd=RK.map(k=>{const rm=DT[k],ts=getEff(t,k),dn=ts.filter(x=>isDone(x,S.chk)).length;tt+=ts.length;td+=dn;return{k,rm,ts,dn}});}
@@ -292,44 +260,17 @@ function render(){
   const{lv,cur,need}=calcLv(S.stats.xp);
 
   let title="Checklist";
-  if(t==="progress")title="Progress";else if(t==="todo")title="To Do";else if(allD&&isF)title="All done ✦";
+  if(t==="progress")title="Progress";else if(allD&&isF)title="All done ✦";
 
   let h=`<div class="header"><h1>${title}</h1><div class="date">${fmtDate()}</div></div>
-    <div class="tabs">${["todo","daily","weekly","monthly","progress"].map(id=>{
-      const lb={todo:"To Do",daily:"Daily",weekly:"Weekly",monthly:"Monthly",progress:"Progress"};
+    <div class="tabs">${["daily","weekly","monthly","progress"].map(id=>{
+      const lb={daily:"Daily",weekly:"Weekly",monthly:"Monthly",progress:"Progress"};
       const a=id===t?"active":"";
-      const cl=id==="daily"?"var(--a-daily)":id==="weekly"?"var(--a-weekly)":id==="monthly"?"var(--a-monthly)":id==="todo"?"var(--a-todo)":"var(--a-progress)";
+      const cl=id==="daily"?"var(--a-daily)":id==="weekly"?"var(--a-weekly)":id==="monthly"?"var(--a-monthly)":"var(--a-progress)";
       return`<button class="tab-btn ${a}" style="${a?`color:${cl}`:""}" onclick="setTab('${id}')">${lb[id]}</button>`;
     }).join("")}</div>`;
 
-  // ═══ TODO ═══
-  if(t==="todo"){
-    const activeTodos=S.todos.filter(i=>!i.done);
-    const doneTodos=S.todos.filter(i=>i.done);
-    h+=`<div class="todo-input-wrap"><input class="todo-input" type="text" placeholder="Add a task..." value="${esc(S.newTodo)}" oninput="S.newTodo=this.value;document.querySelector('.todo-add-btn').className='todo-add-btn'+(this.value.trim()?' ready':'')" onkeydown="if(event.key==='Enter')addTodo()"><button class="todo-add-btn${S.newTodo.trim()?" ready":""}" onclick="addTodo()">+</button></div>`;
-    if(!S.todos.length)h+=`<p class="empty-msg">No tasks yet — add one above</p>`;
-    else{
-      // Active tasks
-      if(activeTodos.length===0&&doneTodos.length>0)h+=`<p style="text-align:center;color:var(--text-muted);padding:20px 0;font-size:15px">All done — nice work</p>`;
-      activeTodos.forEach(i=>{const sw=S.sw[i.id]||{offset:0,show:false};
-        h+=`<div class="todo-item-wrap" id="sw-${i.id}"><div class="todo-delete-bg" style="opacity:${sw.show?1:0.5}" onclick="delTodo('${i.id}')">${trashSvg}</div><div class="todo-item${sw.swiping?" swiping":""}" style="transform:translateX(${sw.offset}px)" ontouchstart="swS(event,'${i.id}')" ontouchmove="swM(event,'${i.id}')" ontouchend="swE('${i.id}')" onclick="if(!S.sw['${i.id}']?.show)togTodo('${i.id}');else{S.sw['${i.id}']={offset:0,show:false};render()}"><div class="checkbox">${""}</div><span class="task-label">${esc(i.label)}</span><span class="swipe-hint">← swipe</span></div></div>`;
-      });
-      // Completed section
-      if(doneTodos.length>0){
-        h+=`<div class="room" style="margin-top:12px"><button class="room-header" onclick="togDoneExp()"><span class="room-icon" style="opacity:0.5">✓</span><span class="room-label" style="color:var(--text-muted)">Completed</span><span class="room-count">${doneTodos.length}</span><span class="room-arrow${S.doneExp?"":" collapsed"}">▾</span></button>`;
-        if(S.doneExp){
-          h+=`<div class="room-body">`;
-          doneTodos.forEach(i=>{const sw=S.sw[i.id]||{offset:0,show:false};
-            h+=`<div class="todo-item-wrap" id="sw-${i.id}"><div class="todo-delete-bg" style="opacity:${sw.show?1:0.5}" onclick="delTodo('${i.id}')">${trashSvg}</div><div class="todo-item${sw.swiping?" swiping":""}" style="transform:translateX(${sw.offset}px);border:none;padding:8px 4px" ontouchstart="swS(event,'${i.id}')" ontouchmove="swM(event,'${i.id}')" ontouchend="swE('${i.id}')" onclick="if(!S.sw['${i.id}']?.show)togTodo('${i.id}');else{S.sw['${i.id}']={offset:0,show:false};render()}"><div class="checkbox checked">${chkSvg}</div><span class="task-label done">${esc(i.label)}</span><span class="swipe-hint">← swipe</span></div></div>`;
-          });
-          h+=`</div>`;
-        }
-        h+=`</div>`;
-      }
-    }
-  }
-
-  // ═══ FREQ ═══
+  // ═══ FREQ TABS ═══
   if(isF){
     h+=`<div class="progress-box" style="background:${bg}"><div class="progress-header"><span class="progress-label" style="color:${ac}">${t} Progress</span><div style="display:flex;align-items:center;gap:12px"><span class="progress-pct" style="color:${ac}">${pct}%</span><button class="edit-btn${S.edit?" active":""}" style="${S.edit?`border-color:${ac};background:${ac}18`:""}" onclick="togEdit()">${editSvg(S.edit?ac:"#a09888")}</button></div></div><div class="bar-wrap"><div class="bar-outer" style="background:${ac}33"><div class="bar-inner" style="width:${pct}%;background:${ac}"></div></div><span class="bar-count" style="color:${ac}">${td}/${tt}</span></div></div>`;
 
@@ -342,14 +283,11 @@ function render(){
       if(isE){
         h+=`<div class="room-body">`;
         ts.forEach(task=>{
-          if(S.edit){
-            const ic=task.id.startsWith("c-");
+          if(S.edit){const ic=task.id.startsWith("c-");
             h+=`<div class="task-row" style="cursor:default"><span class="task-label">${esc(task.label)}</span>${task.note?`<span class="task-note">${esc(task.note)}</span>`:""}<button class="remove-btn" onclick="${ic?`delCustom('${task.id}','${k}')`:`hideT('${task.id}')`}">${xSvg}</button></div>`;
-          }else if(task.type==="counter"){
-            const cnt=S.chk[task.id]||0,met=cnt>=task.min;
+          }else if(task.type==="counter"){const cnt=S.chk[task.id]||0,met=cnt>=task.min;
             h+=`<div class="counter-wrap"><span class="task-label${met?" done":""}">${esc(task.label)}</span><div class="counter-dots">${Array.from({length:task.max},(_,i)=>{const f=i<cnt,mn=i===task.min-1,nv=i<cnt?(i===cnt-1?cnt-1:cnt):i+1;return`<button class="counter-dot${f?" filled":""}${!f&&mn?" min-line":""}" onclick="event.stopPropagation();setCtr('${task.id}',${nv},${JSON.stringify(task).replace(/"/g,'&quot;')})"></button>`}).join("")}<span class="counter-status${met?" met":""}">${met?"done":`${task.min-cnt} more`}</span></div></div>`;
-          }else{
-            const d=!!S.chk[task.id];
+          }else{const d=!!S.chk[task.id];
             h+=`<div class="task-row" onclick="togTask('${task.id}',${JSON.stringify(task).replace(/"/g,'&quot;')})"><div class="checkbox${d?" checked":""}">${d?chkSvg:""}</div><span class="task-label${d?" done":""}">${esc(task.label)}</span>${task.note?`<span class="task-note">${esc(task.note)}</span>`:""}</div>`;
           }
         });
@@ -371,20 +309,13 @@ function render(){
   if(t==="progress"){
     const s=S.stats;
     h+=`<div class="streak-card">${flameSvg(s.frozen)}<div style="flex:1"><div style="display:flex;align-items:baseline;gap:8px"><span class="streak-num" style="color:${s.frozen?"#6ba8c4":"#c4722a"}">${s.streak}</span><span style="font-size:14px;color:var(--text-dim)">day streak</span></div>${s.frozen?`<div style="margin-top:6px"><span style="font-size:12px;color:#6ba8c4;font-family:var(--mono);font-weight:500">FROZEN</span><span style="font-size:12px;color:var(--text-muted)"> — complete 50% of dailies to thaw</span></div>`:""}${!s.frozen&&s.streak>0?`<span style="font-size:12px;color:var(--text-muted)">≥50% daily tasks to keep it alive</span>`:""}${!s.frozen&&s.streak===0?`<span style="font-size:12px;color:var(--text-muted)">Complete half your dailies to start</span>`:""}</div>${s.frozen?`<button class="streak-reset" onclick="resetStrk()">Reset</button>`:""}</div>`;
-    h+=`<div class="stats-card"><div class="stats-title">Lifetime Completed</div><div class="stats-grid">${[{l:"To-Dos",v:s.todos,c:"#7a6a5a"},{l:"Daily",v:s.daily,c:"var(--a-daily)"},{l:"Weekly",v:s.weekly,c:"var(--a-weekly)"},{l:"Monthly",v:s.monthly,c:"var(--a-monthly)"}].map(x=>`<div class="stat-box"><div class="stat-val" style="color:${x.c}">${x.v}</div><div class="stat-label">${x.l}</div></div>`).join("")}</div></div>`;
-    h+=`<div class="xp-card"><div class="xp-header"><div><span style="font-size:13px;font-family:var(--mono);color:var(--text-dim);font-weight:500;text-transform:uppercase;letter-spacing:0.08em">Level </span><span class="xp-level">${lv}</span></div><span class="xp-total">${s.xp} XP total</span></div><div class="xp-bar-labels"><span>${cur} / ${need} XP</span><span>Level ${lv+1}</span></div><div class="xp-bar-outer"><div class="xp-bar-inner" style="width:${(cur/need)*100}%"></div></div><div class="xp-legend">${[{l:"To-Do",x:"1 XP"},{l:"Daily",x:"1 XP"},{l:"Weekly",x:"5 XP"},{l:"Monthly",x:"10 XP"}].map(x=>`<span class="xp-legend-item">${x.l} <span class="xp-legend-val">${x.x}</span></span>`).join("")}</div></div>`;
-
-    // Backup section
+    h+=`<div class="stats-card"><div class="stats-title">Lifetime Completed</div><div class="stats-grid">${[{l:"Daily",v:s.daily,c:"var(--a-daily)"},{l:"Weekly",v:s.weekly,c:"var(--a-weekly)"},{l:"Monthly",v:s.monthly,c:"var(--a-monthly)"}].map(x=>`<div class="stat-box"><div class="stat-val" style="color:${x.c}">${x.v}</div><div class="stat-label">${x.l}</div></div>`).join("")}</div></div>`;
+    h+=`<div class="xp-card"><div class="xp-header"><div><span style="font-size:13px;font-family:var(--mono);color:var(--text-dim);font-weight:500;text-transform:uppercase;letter-spacing:0.08em">Level </span><span class="xp-level">${lv}</span></div><span class="xp-total">${s.xp} XP total</span></div><div class="xp-bar-labels"><span>${cur} / ${need} XP</span><span>Level ${lv+1}</span></div><div class="xp-bar-outer"><div class="xp-bar-inner" style="width:${(cur/need)*100}%"></div></div><div class="xp-legend">${[{l:"Daily",x:"1 XP"},{l:"Weekly",x:"5 XP"},{l:"Monthly",x:"10 XP"}].map(x=>`<span class="xp-legend-item">${x.l} <span class="xp-legend-val">${x.x}</span></span>`).join("")}</div></div>`;
     h+=`<div class="backup-card"><div class="backup-title">Data Backup</div><div class="backup-desc">Export your stats, streak, XP, and task settings. Import to restore on this or another device.</div><div class="backup-btns"><button class="backup-btn primary" onclick="exportData()">${dlSvg} Export</button><button class="backup-btn" onclick="importData()">${upSvg} Import</button></div>${S.backupMsg?`<div class="backup-msg" style="background:${S.backupMsg.type==="success"?"#e8ede4":"#f5e0e0"};color:${S.backupMsg.type==="success"?"var(--a-weekly)":"#a05050"}">${S.backupMsg.text}</div>`:""}</div>`;
   }
 
   document.getElementById("app").innerHTML=h;
 }
-
-// ─── SWIPE ───────────────────────────────────────────────────
-function swS(e,id){if(!S.sw[id])S.sw[id]={offset:0,show:false};S.sw[id].startX=e.touches[0].clientX;S.sw[id].swiping=true}
-function swM(e,id){const sw=S.sw[id];if(!sw?.swiping)return;const dx=e.touches[0].clientX-sw.startX;if(dx<0){sw.offset=Math.max(dx,-80);const el=document.querySelector(`#sw-${CSS.escape(id)} .todo-item`);if(el){el.style.transform=`translateX(${sw.offset}px)`;el.classList.add("swiping")}}}
-function swE(id){const sw=S.sw[id];if(!sw)return;sw.swiping=false;if(sw.offset<-40){sw.offset=-72;sw.show=true;render()}else if(sw.offset!==0){sw.offset=0;sw.show=false;render()}}
 
 // ─── SERVICE WORKER ──────────────────────────────────────────
 if("serviceWorker"in navigator){navigator.serviceWorker.register("./sw.js").catch(()=>{})}

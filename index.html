@@ -215,9 +215,9 @@ function setCtr(id,v,task){
   const w=isDone(task,S.chk);S.chk[id]=v;const n=isDone(task,S.chk);
   sS(sKey(S.tab),S.chk);if(n!==w)adjStats(S.tab,n?1:-1);if(S.tab==="daily")chkStreak();render()
 }
-function addTodo(){const t=S.newTodo.trim();if(!t)return;S.todos.push({id:`td-${Date.now()}`,label:t,done:false});S.newTodo="";sS("cl:todos",S.todos);render()}
-function togTodo(id){const i=S.todos.find(t=>t.id===id);if(!i)return;i.done=!i.done;adjStats("todos",i.done?1:-1);sS("cl:todos",S.todos);render()}
-function delTodo(id){S.todos=S.todos.filter(t=>t.id!==id);sS("cl:todos",S.todos);render()}
+function addTodo(){const t=S.newTodo.trim();if(!t)return;S.todos.push({id:`td-${Date.now()}`,label:t,done:false,doneDate:null});S.newTodo="";sS("cl:todos",S.todos);render()}
+function togTodo(id){const i=S.todos.find(t=>t.id===id);if(!i)return;i.done=!i.done;if(i.done){i.doneDate=today();adjStats("todos",1)}else{adjStats("todos",-1);i.doneDate=null}sS("cl:todos",S.todos);render()}
+function delTodo(id){const i=S.todos.find(t=>t.id===id);if(i&&i.done&&i.doneDate===today())adjStats("todos",-1);S.todos=S.todos.filter(t=>t.id!==id);sS("cl:todos",S.todos);render()}
 function togEdit(){S.edit=!S.edit;S.adding=null;render()}
 function hideT(id){S.hidden[id]=true;sS("cl:hidden",S.hidden);render()}
 function unhideT(id){delete S.hidden[id];sS("cl:hidden",S.hidden);render()}

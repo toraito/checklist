@@ -167,7 +167,7 @@ const DT={
   patio:{label:"Patio",icon:"✧",daily:[{id:"pa-table",label:"Clear table"}],weekly:[],monthly:[]},
 };
 const RK=Object.keys(DT);
-const XPV={todo:1,daily:1,weekly:5,monthly:10};
+const XPV={todo:1,todos:1,daily:1,weekly:5,monthly:10};
 function xpNeed(lv){return 10+lv*10}
 function calcLv(xp){let r=xp,l=1;while(r>=xpNeed(l)){r-=xpNeed(l);l++}return{lv:l,cur:r,need:xpNeed(l)}}
 

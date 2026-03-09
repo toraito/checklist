@@ -192,7 +192,7 @@ let S={
   edit:false,adding:null,newTask:"",
   custom:sG("cl:custom")||{},hidden:sG("cl:hidden")||{},
   stats:sG("cl:stats")||{todos:0,daily:0,weekly:0,monthly:0,xp:0,streak:0,frozen:false,lastActiveDate:null},
-  sw:{},backupMsg:null,
+  sw:{},backupMsg:null,doneExp:false,
 };
 function loadChk(){if(!["daily","weekly","monthly"].includes(S.tab))return;S.chk=sG(sKey(S.tab))||{}}
 loadChk();
@@ -226,6 +226,7 @@ function startAdd(rk){S.adding=rk;S.newTask="";render();setTimeout(()=>{const e=
 function addCustom(rk){const l=S.newTask.trim();if(!l)return;const c=S.custom;if(!c[S.tab])c[S.tab]={};if(!c[S.tab][rk])c[S.tab][rk]=[];c[S.tab][rk].push({id:`c-${Date.now()}-${Math.random().toString(36).slice(2,6)}`,label:l});sS("cl:custom",c);S.adding=null;S.newTask="";render()}
 function resetFreq(){S.chk={};sD(sKey(S.tab));render()}
 function resetStrk(){S.stats.streak=0;S.stats.frozen=false;S.stats.lastActiveDate=null;sS("cl:stats",S.stats);render()}
+function togDoneExp(){S.doneExp=!S.doneExp;render()}
 
 // ─── BACKUP ──────────────────────────────────────────────────
 function exportData(){
@@ -303,11 +304,29 @@ function render(){
 
   // ═══ TODO ═══
   if(t==="todo"){
+    const activeTodos=S.todos.filter(i=>!i.done);
+    const doneTodos=S.todos.filter(i=>i.done);
     h+=`<div class="todo-input-wrap"><input class="todo-input" type="text" placeholder="Add a task..." value="${esc(S.newTodo)}" oninput="S.newTodo=this.value;document.querySelector('.todo-add-btn').className='todo-add-btn'+(this.value.trim()?' ready':'')" onkeydown="if(event.key==='Enter')addTodo()"><button class="todo-add-btn${S.newTodo.trim()?" ready":""}" onclick="addTodo()">+</button></div>`;
     if(!S.todos.length)h+=`<p class="empty-msg">No tasks yet — add one above</p>`;
-    else S.todos.forEach(i=>{const sw=S.sw[i.id]||{offset:0,show:false};
-      h+=`<div class="todo-item-wrap" id="sw-${i.id}"><div class="todo-delete-bg" style="opacity:${sw.show?1:0.5}" onclick="delTodo('${i.id}')">${trashSvg}</div><div class="todo-item${sw.swiping?" swiping":""}" style="transform:translateX(${sw.offset}px)" ontouchstart="swS(event,'${i.id}')" ontouchmove="swM(event,'${i.id}')" ontouchend="swE('${i.id}')" onclick="if(!S.sw['${i.id}']?.show)togTodo('${i.id}');else{S.sw['${i.id}']={offset:0,show:false};render()}"><div class="checkbox${i.done?" checked":""}">${i.done?chkSvg:""}</div><span class="task-label${i.done?" done":""}">${esc(i.label)}</span><span class="swipe-hint">← swipe</span></div></div>`;
-    });
+    else{
+      // Active tasks
+      if(activeTodos.length===0&&doneTodos.length>0)h+=`<p style="text-align:center;color:var(--text-muted);padding:20px 0;font-size:15px">All done — nice work</p>`;
+      activeTodos.forEach(i=>{const sw=S.sw[i.id]||{offset:0,show:false};
+        h+=`<div class="todo-item-wrap" id="sw-${i.id}"><div class="todo-delete-bg" style="opacity:${sw.show?1:0.5}" onclick="delTodo('${i.id}')">${trashSvg}</div><div class="todo-item${sw.swiping?" swiping":""}" style="transform:translateX(${sw.offset}px)" ontouchstart="swS(event,'${i.id}')" ontouchmove="swM(event,'${i.id}')" ontouchend="swE('${i.id}')" onclick="if(!S.sw['${i.id}']?.show)togTodo('${i.id}');else{S.sw['${i.id}']={offset:0,show:false};render()}"><div class="checkbox">${""}</div><span class="task-label">${esc(i.label)}</span><span class="swipe-hint">← swipe</span></div></div>`;
+      });
+      // Completed section
+      if(doneTodos.length>0){
+        h+=`<div class="room" style="margin-top:12px"><button class="room-header" onclick="togDoneExp()"><span class="room-icon" style="opacity:0.5">✓</span><span class="room-label" style="color:var(--text-muted)">Completed</span><span class="room-count">${doneTodos.length}</span><span class="room-arrow${S.doneExp?"":" collapsed"}">▾</span></button>`;
+        if(S.doneExp){
+          h+=`<div class="room-body">`;
+          doneTodos.forEach(i=>{const sw=S.sw[i.id]||{offset:0,show:false};
+            h+=`<div class="todo-item-wrap" id="sw-${i.id}"><div class="todo-delete-bg" style="opacity:${sw.show?1:0.5}" onclick="delTodo('${i.id}')">${trashSvg}</div><div class="todo-item${sw.swiping?" swiping":""}" style="transform:translateX(${sw.offset}px);border:none;padding:8px 4px" ontouchstart="swS(event,'${i.id}')" ontouchmove="swM(event,'${i.id}')" ontouchend="swE('${i.id}')" onclick="if(!S.sw['${i.id}']?.show)togTodo('${i.id}');else{S.sw['${i.id}']={offset:0,show:false};render()}"><div class="checkbox checked">${chkSvg}</div><span class="task-label done">${esc(i.label)}</span><span class="swipe-hint">← swipe</span></div></div>`;
+          });
+          h+=`</div>`;
+        }
+        h+=`</div>`;
+      }
+    }
   }
 
   // ═══ FREQ ═══

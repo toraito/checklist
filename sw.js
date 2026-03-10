@@ -1,4 +1,4 @@
-const CACHE_NAME = 'checklist-v8';
+const CACHE_NAME = 'checklist-v7';
 const ASSETS = ['./index.html', './manifest.json'];
 
 self.addEventListener('install', e => {

@@ -167,9 +167,10 @@ function isoW(d){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDat
 function isoWY(d){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const n=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-n);return t.getUTCFullYear()}
 function today(){const n=new Date();return`${n.getFullYear()}-${n.getMonth()+1}-${n.getDate()}`}
 function yesterday(){const d=new Date();d.setDate(d.getDate()-1);return`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`}
-function sKey(f){const n=new Date(),y=n.getFullYear(),m=n.getMonth()+1,d=n.getDate();if(f==="daily")return`cl:d:${y}-${m}-${d}`;if(f==="weekly")return`cl:w:${isoWY(n)}-w${isoW(n)}`;if(f==="monthly")return`cl:m:${y}-${m}`;return`cl:${f}`}
+function viewDate(){const d=new Date();d.setDate(d.getDate()+(S.dateOffset||0));return d}
+function sKey(f){const n=viewDate(),y=n.getFullYear(),m=n.getMonth()+1,d=n.getDate();if(f==="daily")return`cl:d:${y}-${m}-${d}`;if(f==="weekly")return`cl:w:${isoWY(n)}-w${isoW(n)}`;if(f==="monthly")return`cl:m:${y}-${m}`;return`cl:${f}`}
 function isDone(t,s){if(t.type==="counter")return(s[t.id]||0)>=t.min;return!!s[t.id]}
-function fmtDate(){return new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
+function fmtDate(){const d=viewDate();const off=S.dateOffset||0;const label=d.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"});if(off===0)return label;return label}
 
 // ─── STORAGE ─────────────────────────────────────────────────
 function sG(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch{return null}}
@@ -178,7 +179,7 @@ function sD(k){try{localStorage.removeItem(k)}catch{}}
 
 // ─── STATE ───────────────────────────────────────────────────
 let S={
-  tab:"daily",chk:{},exp:{},
+  tab:"daily",chk:{},exp:{},dateOffset:0,
   edit:false,adding:null,newTask:"",
   custom:sG("cl:custom")||{},hidden:sG("cl:hidden")||{},
   stats:sG("cl:stats")||{daily:0,weekly:0,monthly:0,xp:0,streak:0,frozen:false,lastActiveDate:null},
@@ -192,18 +193,30 @@ loadChk();
 function getEff(f,rk){const d=(DT[rk]?.[f]||[]).filter(t=>!S.hidden[t.id]);const c=S.custom[f]?.[rk]||[];return[...d,...c]}
 function allTasks(f){const a=[];RK.forEach(r=>getEff(f,r).forEach(t=>a.push(t)));return a}
 function adjStats(fk,d){const s=S.stats;s.xp=Math.max(0,s.xp+d*(XPV[fk]||0));s[fk]=Math.max(0,(s[fk]||0)+d);sS("cl:stats",s)}
-function chkStreak(){const ts=allTasks("daily");const dn=ts.filter(t=>isDone(t,S.chk)).length;if(dn>=Math.ceil(ts.length/2)&&S.stats.lastActiveDate!==today()){S.stats.streak=S.stats.frozen?S.stats.streak:S.stats.streak+1;S.stats.frozen=false;S.stats.lastActiveDate=today();sS("cl:stats",S.stats)}}
+function chkStreak(){
+  const ts=allTasks("daily");const dn=ts.filter(t=>isDone(t,S.chk)).length;const half=dn>=Math.ceil(ts.length/2);
+  if(!half)return;
+  const off=S.dateOffset||0;const s=S.stats;
+  if(off===0&&s.lastActiveDate!==today()){
+    // Today: normal streak logic
+    s.streak=s.frozen?s.streak:s.streak+1;s.frozen=false;s.lastActiveDate=today();sS("cl:stats",s);
+  }else if(off===-1&&s.lastActiveDate!==today()&&s.lastActiveDate!==yesterday()){
+    // Yesterday retroactive: thaw freeze or increment, set lastActive to yesterday
+    s.streak=s.frozen?s.streak:s.streak+1;s.frozen=false;s.lastActiveDate=yesterday();sS("cl:stats",s);
+  }
+}
 
 // ─── ACTIONS ─────────────────────────────────────────────────
-function setTab(t){S.tab=t;S.edit=false;S.adding=null;S.backupMsg=null;loadChk();render()}
+function setTab(t){S.tab=t;S.edit=false;S.adding=null;S.backupMsg=null;S.dateOffset=0;loadChk();render()}
+function navDate(d){const nv=S.dateOffset+d;if(nv>0||nv<-7)return;S.dateOffset=nv;loadChk();render()}
 function togExp(k){S.exp[k]=S.exp[k]===false?true:!S.exp[k]||false;if(S.exp[k]===true)delete S.exp[k];render()}
 function togTask(id,task){
   const w=isDone(task,S.chk);S.chk[id]=!S.chk[id];const n=isDone(task,S.chk);
-  sS(sKey(S.tab),S.chk);if(n!==w)adjStats(S.tab,n?1:-1);if(S.tab==="daily")chkStreak();render()
+  sS(sKey(S.tab),S.chk);if(n!==w)adjStats(S.tab,n?1:-1);if(S.tab==="daily"&&S.dateOffset>==-1)chkStreak();render()
 }
 function setCtr(id,v,task){
   const w=isDone(task,S.chk);S.chk[id]=v;const n=isDone(task,S.chk);
-  sS(sKey(S.tab),S.chk);if(n!==w)adjStats(S.tab,n?1:-1);if(S.tab==="daily")chkStreak();render()
+  sS(sKey(S.tab),S.chk);if(n!==w)adjStats(S.tab,n?1:-1);if(S.tab==="daily"&&S.dateOffset>==-1)chkStreak();render()
 }
 function togEdit(){S.edit=!S.edit;S.adding=null;render()}
 function hideT(id){S.hidden[id]=true;sS("cl:hidden",S.hidden);render()}
@@ -262,7 +275,14 @@ function render(){
   let title="Checklist";
   if(t==="progress")title="Progress";else if(allD&&isF)title="All done ✦";
 
-  let h=`<div class="header"><h1>${title}</h1><div class="date">${fmtDate()}</div></div>
+  const off=S.dateOffset||0;
+  const isPast=off<0;
+  const arrowL=off>-7?`<button onclick="navDate(-1)" style="border:none;background:transparent;cursor:pointer;padding:4px 8px;font-size:16px;color:var(--text-dim);opacity:0.7">‹</button>`:`<span style="padding:4px 8px;font-size:16px;opacity:0.2;color:var(--text-muted)">‹</span>`;
+  const arrowR=off<0?`<button onclick="navDate(1)" style="border:none;background:transparent;cursor:pointer;padding:4px 8px;font-size:16px;color:var(--text-dim);opacity:0.7">›</button>`:`<span style="padding:4px 8px;font-size:16px;opacity:0.2;color:var(--text-muted)">›</span>`;
+  const todayBtn=isPast?`<button onclick="S.dateOffset=0;loadChk();render()" style="border:1px solid var(--border);background:var(--card);border-radius:6px;padding:2px 8px;font-family:var(--mono);font-size:10px;color:var(--text-dim);cursor:pointer;margin-left:8px">Today</button>`:"";
+  const dateRow=isF?`<div style="display:flex;align-items:center">${arrowL}<span style="font-size:14px;color:${isPast?"var(--a-daily)":"var(--text-dim)"};font-family:var(--mono);font-weight:${isPast?500:400}">${fmtDate()}</span>${arrowR}${todayBtn}</div>`:`<div class="date">${fmtDate()}</div>`;
+
+  let h=`<div class="header"><h1>${title}</h1>${dateRow}</div>
     <div class="tabs">${["daily","weekly","monthly","progress"].map(id=>{
       const lb={daily:"Daily",weekly:"Weekly",monthly:"Monthly",progress:"Progress"};
       const a=id===t?"active":"";

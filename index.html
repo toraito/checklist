@@ -212,11 +212,11 @@ function navDate(d){const nv=S.dateOffset+d;if(nv>0||nv<-7)return;S.dateOffset=n
 function togExp(k){S.exp[k]=S.exp[k]===false?true:!S.exp[k]||false;if(S.exp[k]===true)delete S.exp[k];render()}
 function togTask(id,task){
   const w=isDone(task,S.chk);S.chk[id]=!S.chk[id];const n=isDone(task,S.chk);
-  sS(sKey(S.tab),S.chk);if(n!==w)adjStats(S.tab,n?1:-1);if(S.tab==="daily"&&S.dateOffset>==-1)chkStreak();render()
+  sS(sKey(S.tab),S.chk);if(n!==w)adjStats(S.tab,n?1:-1);if(S.tab==="daily"&&S.dateOffset>=-1)chkStreak();render()
 }
 function setCtr(id,v,task){
   const w=isDone(task,S.chk);S.chk[id]=v;const n=isDone(task,S.chk);
-  sS(sKey(S.tab),S.chk);if(n!==w)adjStats(S.tab,n?1:-1);if(S.tab==="daily"&&S.dateOffset>==-1)chkStreak();render()
+  sS(sKey(S.tab),S.chk);if(n!==w)adjStats(S.tab,n?1:-1);if(S.tab==="daily"&&S.dateOffset>=-1)chkStreak();render()
 }
 function togEdit(){S.edit=!S.edit;S.adding=null;render()}
 function hideT(id){S.hidden[id]=true;sS("cl:hidden",S.hidden);render()}
